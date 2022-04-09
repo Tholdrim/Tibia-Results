@@ -8,7 +8,7 @@ namespace TibiaResults.Models
         public int Rank { get; init; }
 
         [JsonPropertyName("name")]
-        public string? Name { get; init; }
+        public string Name { get; init; } = null!;
 
         [JsonPropertyName("level")]
         public int Level { get; init; }

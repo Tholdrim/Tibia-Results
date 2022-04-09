@@ -12,10 +12,10 @@
 
         public IEnumerable<CategoryResultEntry> Entries { get; init; } = null!;
 
-        public static CategoryResult Create(IEnumerable<CategoryResultEntry>? entries = null) => new()
+        public static CategoryResult Create(IEnumerable<CategoryResultEntry> entries) => new()
         {
             IsAvailable = true,
-            Entries = entries ?? Enumerable.Empty<CategoryResultEntry>()
+            Entries = entries
         };
 
         public static CategoryResult CreateNotAvailable() => new()
