@@ -22,7 +22,7 @@ namespace TibiaResults.Configuration
 
             BlobContainerUri = applicationSettings.BlobContainerUri;
             LocalPath = applicationSettings.LocalPath;
-            Characters = applicationSettings.Characters.ToHashSet();
+            Characters = applicationSettings.Characters;
             Dates = (fromDate, toDate);
         }
 
@@ -30,7 +30,7 @@ namespace TibiaResults.Configuration
 
         public string? LocalPath { get; }
 
-        public ISet<string> Characters { get; }
+        public IEnumerable<string> Characters { get; }
 
         public (DateOnly From, DateOnly To) Dates { get; }
     }

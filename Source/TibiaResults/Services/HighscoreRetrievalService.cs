@@ -30,11 +30,32 @@ namespace TibiaResults.Services
 
                 if (highscore != null)
                 {
-                    return highscore;
+                    return GetRelevantEntries(highscore);
                 }
             }
 
             return null;
+        }
+
+        private IEnumerable<HighscoreEntry> GetRelevantEntries(IEnumerable<HighscoreEntry> entries)
+        {
+            var result = new List<HighscoreEntry>();
+
+            foreach (var character in _configuration.Characters)
+            {
+                var characterEntry = entries.SingleOrDefault(e => e.Name == character);
+
+                if (characterEntry == null)
+                {
+                    continue;
+                }
+
+                characterEntry.Rank = entries.Where(e => e.Value == characterEntry.Value).Min(e => e.Rank);
+
+                result.Add(characterEntry);
+            }
+
+            return result;
         }
 
         private static IEnumerable<IHighscoreProvider> InitializeProviders(IConfiguration configuration)

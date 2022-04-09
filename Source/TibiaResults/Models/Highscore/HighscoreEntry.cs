@@ -5,7 +5,7 @@ namespace TibiaResults.Models
     internal class HighscoreEntry
     {
         [JsonPropertyName("rank")]
-        public int Rank { get; init; }
+        public int Rank { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; init; } = null!;
