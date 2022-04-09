@@ -6,7 +6,7 @@
 
         string? LocalPath { get; }
 
-        IEnumerable<string> Characters { get; }
+        ISet<string> Characters { get; }
 
         (DateOnly From, DateOnly To) Dates { get; }
     }

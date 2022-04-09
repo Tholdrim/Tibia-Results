@@ -7,6 +7,11 @@ namespace TibiaResults.Configuration
     {
         public Configuration(ApplicationSettings applicationSettings)
         {
+            if (applicationSettings.Characters == null || !applicationSettings.Characters.Any())
+            {
+                throw new InvalidOperationException("No character was specified. Please check the application settings.");
+            }
+
             if (!applicationSettings.From.HasValue || !applicationSettings.To.HasValue)
             {
                 throw new InvalidOperationException("The 'from' and 'to' dates are required and cannot be omitted. Please check the application settings.");
@@ -17,7 +22,7 @@ namespace TibiaResults.Configuration
 
             BlobContainerUri = applicationSettings.BlobContainerUri;
             LocalPath = applicationSettings.LocalPath;
-            Characters = applicationSettings.Characters ?? Enumerable.Empty<string>();
+            Characters = applicationSettings.Characters.ToHashSet();
             Dates = (fromDate, toDate);
         }
 
@@ -25,7 +30,7 @@ namespace TibiaResults.Configuration
 
         public string? LocalPath { get; }
 
-        public IEnumerable<string> Characters { get; }
+        public ISet<string> Characters { get; }
 
         public (DateOnly From, DateOnly To) Dates { get; }
     }
