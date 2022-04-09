@@ -43,7 +43,7 @@ If a file representing current or previous high score list is missing for any pa
 
 ## Customization
 
-The repository offers out of the box two ways to load saved data: from an Azure Blob container or from a local folder, and one way to format the results: as the content of a post on Discord messenger. To add more features, simply implement the `IHighscoreProvider` or `IResultFormatter` interfaces.
+The repository offers out of the box two ways to load saved data: from an Azure Blob container or from a local folder, and one way to format the results: as the content of a post on Discord messenger. To add more features, simply implement the `IHighscoreProvider` or [`IResultFormatter`](Source/TibiaResults/Interfaces/IResultFormatter.cs) interfaces.
 
 ## License
 
