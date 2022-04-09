@@ -12,7 +12,7 @@ The first step is to get the JSON files from the TibiaData API page. These shoul
 
 ```
 {
-    "LocalPath": "C:\TibiaData\"
+    "LocalPath": "C:/TibiaData/"
     "Characters": [
         "Tholdrim",
         "Khilleron",
@@ -37,7 +37,7 @@ dotnet run TibiaResults
 
 ## Results
 
-The result is served based on the configuration from the `CategoryHelper.cs` file. All characters that are present in the high score list for a given category will be listed with their position on the server, current score, and progress against the previous value. Special treatment is given to the Experience category, where the program tries to find an approximate number of experience points on the basis of the other high score lists, if the character has too low a level to be included in the official ranking.
+The result is served based on the configuration from the [`CategoryHelper.cs`](Source/TibiaResults/Helpers/CategoryHelper.cs) file. All characters that are present in the high score list for a given category will be listed with their position on the server, current score, and progress against the previous value. Special treatment is given to the Experience category, where the program tries to find an approximate number of experience points on the basis of the other high score lists, if the character has too low a level to be included in the official ranking.
 
 If a file representing current or previous high score list is missing for any particular category, the *Not available* message will be returned instead.
 
