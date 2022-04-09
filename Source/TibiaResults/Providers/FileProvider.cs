@@ -18,9 +18,9 @@ namespace TibiaResults.Providers
 
         private string LocalPath { get; }
 
-        public Task<IEnumerable<HighscoreEntry>?> GetHighscoreAsync(string identifier, DateOnly date) => ReadHighscoreAsync(identifier, date);
+        public Task<Highscore?> GetHighscoreAsync(string identifier, DateOnly date) => ReadHighscoreAsync(identifier, date);
 
-        private async Task<IEnumerable<HighscoreEntry>?> ReadHighscoreAsync(string identifier, DateOnly date)
+        private async Task<Highscore?> ReadHighscoreAsync(string identifier, DateOnly date)
         {
             var filePath = Path.Combine(LocalPath, identifier, $"{date:yyyy-MM-dd}.json");
             var fileExists = File.Exists(filePath);
@@ -33,7 +33,7 @@ namespace TibiaResults.Providers
             var fileStream = File.OpenRead(filePath);
             var highscoresRoot = await JsonSerializer.DeserializeAsync<HighscoreRoot>(fileStream);
 
-            return highscoresRoot?.Highscores?.HighscoreList;
+            return highscoresRoot?.Highscores;
         }
     }
 }

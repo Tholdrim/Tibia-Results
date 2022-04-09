@@ -13,7 +13,7 @@ namespace TibiaResults.Services
         {
             _configuration = configuration;
 
-            Providers = new Lazy<IEnumerable<IHighscoreProvider>>(() => InitializeProviders(configuration));
+            Providers = new Lazy<IEnumerable<IHighscoreProvider>>(InitializeProviders);
         }
 
         private Lazy<IEnumerable<IHighscoreProvider>> Providers { get; }
@@ -28,9 +28,11 @@ namespace TibiaResults.Services
             {
                 var highscore = await TryToGetHighscoreAsync(provider, identifier, date);
 
-                if (highscore != null)
+                if (highscore?.HighscoreList != null)
                 {
-                    return GetRelevantEntries(highscore);
+                    var relevantEntries = GetRelevantEntries(highscore.HighscoreList);
+
+                    return relevantEntries.ToList();
                 }
             }
 
@@ -39,8 +41,6 @@ namespace TibiaResults.Services
 
         private IEnumerable<HighscoreEntry> GetRelevantEntries(IEnumerable<HighscoreEntry> entries)
         {
-            var result = new List<HighscoreEntry>();
-
             foreach (var character in _configuration.Characters)
             {
                 var characterEntry = entries.SingleOrDefault(e => e.Name == character);
@@ -52,30 +52,35 @@ namespace TibiaResults.Services
 
                 characterEntry.Rank = entries.Where(e => e.Value == characterEntry.Value).Min(e => e.Rank);
 
-                result.Add(characterEntry);
+                yield return characterEntry;
             }
-
-            return result;
         }
 
-        private static IEnumerable<IHighscoreProvider> InitializeProviders(IConfiguration configuration)
+        private IEnumerable<IHighscoreProvider> InitializeProviders()
         {
-            if (configuration.LocalPath != null)
+            var providers = GetProviders(_configuration.BlobContainerUri, _configuration.LocalPath);
+
+            return providers.ToList();
+        }
+
+        private static IEnumerable<IHighscoreProvider> GetProviders(Uri? blobContainerUri, string? localPath)
+        {
+            if (localPath != null)
             {
-                yield return TryToCreateProvider(() => new FileProvider(configuration.LocalPath));
+                yield return TryToCreateProvider(() => new FileProvider(localPath));
             }
 
-            if (configuration.BlobContainerUri != null)
+            if (blobContainerUri != null)
             {
-                yield return TryToCreateProvider(() => new AzureBlobProvider(configuration.BlobContainerUri));
+                yield return TryToCreateProvider(() => new AzureBlobProvider(blobContainerUri));
             }
         }
 
-        private static T TryToCreateProvider<T>(Func<T> @delegate) where T : class
+        private static T TryToCreateProvider<T>(Func<T> providerCreatingDelegate) where T : class
         {
             try
             {
-                return @delegate();
+                return providerCreatingDelegate();
             }
             catch (Exception exception)
             {
@@ -83,7 +88,7 @@ namespace TibiaResults.Services
             }
         }
 
-        private static async Task<IEnumerable<HighscoreEntry>?> TryToGetHighscoreAsync(IHighscoreProvider provider, string identifier, DateOnly date)
+        private static async Task<Highscore?> TryToGetHighscoreAsync(IHighscoreProvider provider, string identifier, DateOnly date)
         {
             try
             {
