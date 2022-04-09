@@ -12,8 +12,8 @@ The first step is to get the JSON files from the TibiaData API page. These shoul
 
 ```
 {
-    "LocalPath": "C:/TibiaData"
-    "Characters": [
+    "localPath": "C:/TibiaData"
+    "characters": [
         "Tholdrim",
         "Khilleron",
         "Tuuro",
@@ -22,8 +22,8 @@ The first step is to get the JSON files from the TibiaData API page. These shoul
         "Cieniaseq",
         "Talisis"
     ],
-    "From": "2022-02-01",
-    "To": "2022-03-01"
+    "from": "2022-02-01",
+    "to": "2022-03-01"
 }
 ```
 

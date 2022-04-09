@@ -1,11 +1,11 @@
 ﻿{
-    "BlobContainerUri": "«Azure Blob container SAS URL»",
-    "LocalPath": "«local path»",
-    "Characters": [
+    "blobContainerUri": "«Azure Blob container SAS URL»",
+    "localPath": "«local path»",
+    "characters": [
         "«character name 1»",
         "«character name 2»",
         "«character name 3»"
     ],
-    "From": "«from date»",
-    "To": "«to date»"
+    "from": "«from date»",
+    "to": "«to date»"
 }
