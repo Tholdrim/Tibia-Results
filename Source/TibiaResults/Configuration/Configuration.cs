@@ -1,11 +1,28 @@
-﻿using TibiaResults.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
 using TibiaResults.Models;
+
+using IConfiguration = TibiaResults.Interfaces.IConfiguration;
 
 namespace TibiaResults.Configuration
 {
     internal class Configuration : IConfiguration
     {
-        public Configuration(ApplicationSettings applicationSettings)
+        public Configuration()
+        {
+            var applicationSettings = GetApplicationSettings();
+
+            Initialize(applicationSettings);
+        }
+
+        public Uri? BlobContainerUri { get; private set; }
+
+        public string? LocalPath { get; private set; }
+
+        public IEnumerable<string> Characters { get; private set; } = null!;
+
+        public (DateOnly From, DateOnly To) Dates { get; private set; }
+
+        private void Initialize(ApplicationSettings applicationSettings)
         {
             if (applicationSettings.Characters == null || !applicationSettings.Characters.Any())
             {
@@ -26,12 +43,13 @@ namespace TibiaResults.Configuration
             Dates = (fromDate, toDate);
         }
 
-        public Uri? BlobContainerUri { get; }
+        private static ApplicationSettings GetApplicationSettings()
+        {
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddJsonFile("Settings.json")
+                .Build();
 
-        public string? LocalPath { get; }
-
-        public IEnumerable<string> Characters { get; }
-
-        public (DateOnly From, DateOnly To) Dates { get; }
+            return configurationBuilder.Get<ApplicationSettings>();
+        }
     }
 }
