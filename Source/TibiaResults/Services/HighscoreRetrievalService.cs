@@ -76,7 +76,8 @@ namespace TibiaResults.Services
             }
         }
 
-        private static T TryToCreateProvider<T>(Func<T> providerCreatingDelegate) where T : class
+        private static TProvider TryToCreateProvider<TProvider>(Func<TProvider> providerCreatingDelegate)
+            where TProvider : IHighscoreProvider
         {
             try
             {
@@ -84,7 +85,7 @@ namespace TibiaResults.Services
             }
             catch (Exception exception)
             {
-                throw new ProviderInitializationException<T>(exception);
+                throw new ProviderInitializationException<TProvider>(exception);
             }
         }
 
