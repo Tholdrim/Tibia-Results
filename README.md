@@ -30,16 +30,16 @@ The first step is to get the JSON files from the TibiaData API page. These shoul
 Finally, go to the `./Source/TibiaResults/` directory and run the program with the following command:
 
 ```
-dotnet run TibiaResults
+dotnet run
 ```
 
 <sub>Note: To use the `dotnet` command, you must first install [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) or later.</sub>
 
 ## Results
 
-The result is served based on the configuration from the [`CategoryHelper.cs`](Source/TibiaResults/Helpers/CategoryHelper.cs) file. All characters that are present in the high score list for a given category will be listed with their position on the server, current score, and progress against the previous value. Special treatment is given to the Experience category, where the program tries to find an approximate number of experience points on the basis of the other high score lists, if the character has too low a level to be included in the official ranking.
+The result is served based on the configuration from the [`CategoryHelper.cs`](Source/TibiaResults/Helpers/CategoryHelper.cs) file. All characters that are present in the high score list for a given category will be listed with their position on the server, current score, and progress against the previous value. Special treatment is given to the Experience category, where the program tries to find an approximate number of experience points based on the other high score lists if the character has too low a level to be included in the official ranking.
 
-If a file representing current or previous high score list is missing for any particular category, the *Not available* message will be returned instead.
+If a file representing the current or previous high score list is missing for any particular category, the *Not available* message will be returned instead.
 
 ## Customization
 
@@ -47,4 +47,4 @@ The repository offers out of the box two ways to load saved data: from an Azure 
 
 ## License
 
-It is open source software licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for more details.
+It is open-source software licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for more details.
