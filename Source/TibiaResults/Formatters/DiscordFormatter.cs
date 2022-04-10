@@ -61,9 +61,11 @@ namespace TibiaResults.Formatters
 
         private static string FormatEntryProgress(CategoryResultEntry entry) => entry switch
         {
-            { Progress: 0 }    => string.Empty,
-            { Progress: null } => " :new:",
-            _                  => $" (**{(entry.IsApproximate ? "approximately " : string.Empty)}+{entry.Progress.Value:N0}**)"
+            { Progress: 0 }                     => string.Empty,
+            { Progress: null }                  => " :new:",
+            { IsApproximate: true, Rank: { } }  => $" :new: (**approximately +{entry.Progress.Value:N0}**)",
+            { IsApproximate: true, Rank: null } => $" (**approximately +{entry.Progress.Value:N0}**)",
+            _                                   => $" (**+{entry.Progress.Value:N0}**)"
         };
     }
 }
