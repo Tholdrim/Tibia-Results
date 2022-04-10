@@ -6,7 +6,7 @@ namespace TibiaResults.Helpers
     {
         public static readonly Category Experience = new(7, "experience", "Experience");
 
-        public static IEnumerable<Category> GetOtherCategories()
+        public static IEnumerable<Category> GetNonExperienceCategories()
         {
             yield return new(1, "achievements", "Achievements");
             yield return new(2, "axefighting", "Axe Fighting");
