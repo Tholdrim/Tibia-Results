@@ -36,19 +36,14 @@ namespace TibiaResults.Services
             var oldHighscore = await _highscoreRetrievalService.GetOldHighscoreAsync(category.Identifier);
             var newHighscore = await _highscoreRetrievalService.GetNewHighscoreAsync(category.Identifier);
 
+            if (category == CategoryHelper.Experience)
+            {
+                return _resultComputingService.ComputeExperienceCategoryResult(oldHighscore, newHighscore, levelTracker);
+            }
+
             _levelTrackingService.UpdateLevelTracker(levelTracker, oldHighscore, newHighscore);
 
             return _resultComputingService.ComputeCategoryResult(oldHighscore, newHighscore);
-        }
-
-        private async Task<CategoryResult> GetExperienceCategoryResultAsync(ILevelTracker levelTracker)
-        {
-            var experienceCategoryIdentifier = CategoryHelper.Experience.Identifier;
-
-            var oldHighscore = await _highscoreRetrievalService.GetOldHighscoreAsync(experienceCategoryIdentifier);
-            var newHighscore = await _highscoreRetrievalService.GetNewHighscoreAsync(experienceCategoryIdentifier);
-
-            return _resultComputingService.ComputeExperienceCategoryResult(oldHighscore, newHighscore, levelTracker);
         }
 
         private async Task<IResult> GetResultAsync()
@@ -56,16 +51,12 @@ namespace TibiaResults.Services
             var result = Result.CreateNew();
             var levelTracker = LevelTracker.CreateEmpty();
 
-            foreach (var category in CategoryHelper.GetNonExperienceCategories())
+            foreach (var category in CategoryHelper.GetCategories())
             {
                 var categoryResult = await GetCategoryResultAsync(category, levelTracker);
 
                 result.Add(category, categoryResult);
             }
-
-            var experienceCategoryResult = await GetExperienceCategoryResultAsync(levelTracker);
-
-            result.Add(CategoryHelper.Experience, experienceCategoryResult);
 
             return result;
         }

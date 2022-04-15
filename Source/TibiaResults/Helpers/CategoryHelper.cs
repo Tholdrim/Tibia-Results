@@ -6,7 +6,7 @@ namespace TibiaResults.Helpers
     {
         public static readonly Category Experience = new(7, "experience", "Experience");
 
-        public static IEnumerable<Category> GetNonExperienceCategories()
+        public static IEnumerable<Category> GetCategories()
         {
             yield return new(1, "achievements", "Achievements");
             yield return new(2, "axefighting", "Axe Fighting");
@@ -21,6 +21,8 @@ namespace TibiaResults.Helpers
             yield return new(12, "magiclevel", "Magic Level");
             yield return new(13, "shielding", "Shielding");
             yield return new(14, "swordfighting", "Sword Fighting");
+
+            yield return Experience;
         }
     }
 }

@@ -28,10 +28,10 @@ namespace TibiaResults.Services
 
                     ExitCode = 0;
                 }
-                catch (Exception e)
+                catch (Exception exception)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"ERROR: {e.Message}");
+                    Console.WriteLine($"ERROR: {exception.Message}");
                     Console.ForegroundColor = ConsoleColor.Gray;
 
                     ExitCode = -1;
