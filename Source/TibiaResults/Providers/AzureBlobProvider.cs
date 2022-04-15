@@ -26,8 +26,9 @@ namespace TibiaResults.Providers
                 return null;
             }
 
-            var streamingResponse = await blob.DownloadStreamingAsync();
-            var highscoresRoot = await JsonSerializer.DeserializeAsync<HighscoreRoot>(streamingResponse.Value.Content);
+            using var blobStream = await blob.OpenReadAsync();
+
+            var highscoresRoot = await JsonSerializer.DeserializeAsync<HighscoreRoot>(blobStream);
 
             return highscoresRoot?.Highscores;
         }

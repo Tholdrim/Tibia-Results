@@ -30,7 +30,8 @@ namespace TibiaResults.Providers
                 return null;
             }
             
-            var fileStream = File.OpenRead(filePath);
+            using var fileStream = File.OpenRead(filePath);
+
             var highscoresRoot = await JsonSerializer.DeserializeAsync<HighscoreRoot>(fileStream);
 
             return highscoresRoot?.Highscores;
