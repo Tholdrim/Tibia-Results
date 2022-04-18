@@ -43,9 +43,9 @@ If a file representing the current or previous high score list is missing for an
 
 ## Customization
 
-The code in the repository offers two ways to load stored data: from an Azure Blob container or from a local folder, and one way to format the results: as the [Discord](https://discord.com) message content. To add more features, implement the [`IHighscoreProvider`](Source/TibiaResults/Interfaces/IHighscoreProvider.cs) or [`IResultFormatter`](Source/TibiaResults/Interfaces/IResultFormatter.cs) interfaces.
+The display order and names of each category are defined in the [`Categories.cs`](Source/TibiaResults/Consts/Categories.cs) file. By modifying it, you can change these settings. Whereas the [`CategoryHelper.cs`](Source/TibiaResults/Helpers/CategoryHelper.cs) file is used to define a subset of the categories that the program should process. When changing it, note that the Experience category should be last in the list to ensure the correct calculation of approximate experience for low-level characters.
 
-The display order and names of each category are defined in the [`CategoryHelper.cs`](Source/TibiaResults/Helpers/CategoryHelper.cs) file. By modifying it, you can change or remove some of them. The Experience category should be last in the list to ensure the correct calculation of approximate experience for low-level characters.
+By default, there are two ways to load stored data: from an Azure Blob container or a local folder, and one way to format the results: as the [Discord](https://discord.com) message content. To add more features, implement the [`IHighscoreProvider`](Source/TibiaResults/Interfaces/IHighscoreProvider.cs) or [`IResultFormatter`](Source/TibiaResults/Interfaces/IResultFormatter.cs) interfaces.
 
 ## License
 

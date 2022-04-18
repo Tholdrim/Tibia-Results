@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using TibiaResults.Helpers;
 using TibiaResults.Interfaces;
 using TibiaResults.Models;
 
@@ -8,11 +8,6 @@ namespace TibiaResults.Providers
     {
         public FileProvider(string localPath)
         {
-            if (!Directory.Exists(localPath))
-            {
-                throw new InvalidOperationException("The specified directory does not exist.");
-            }
-
             LocalPath = localPath;
         }
 
@@ -22,17 +17,8 @@ namespace TibiaResults.Providers
 
         private async Task<Highscore?> ReadHighscoreAsync(string identifier, DateOnly date)
         {
-            var filePath = Path.Combine(LocalPath, identifier, $"{date:yyyy-MM-dd}.json");
-            var fileExists = File.Exists(filePath);
-
-            if (!fileExists)
-            {
-                return null;
-            }
-            
-            using var fileStream = File.OpenRead(filePath);
-
-            var highscoresRoot = await JsonSerializer.DeserializeAsync<HighscoreRoot>(fileStream);
+            var fileName = Path.Combine(LocalPath, identifier, $"{date:yyyy-MM-dd}.json");
+            var highscoresRoot = await FileHelper.DeserializeFromFileAsync<HighscoreRoot>(fileName);
 
             return highscoresRoot?.Highscores;
         }

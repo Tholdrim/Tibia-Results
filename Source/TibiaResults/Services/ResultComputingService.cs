@@ -6,11 +6,11 @@ namespace TibiaResults.Services
 {
     internal class ResultComputingService : IResultComputingService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfigurationService _configurationService;
 
-        public ResultComputingService(IConfiguration configuration)
+        public ResultComputingService(IConfigurationService configurationService)
         {
-            _configuration = configuration;
+            _configurationService = configurationService;
         }
 
         public CategoryResult ComputeCategoryResult(IEnumerable<HighscoreEntry>? oldHighscore, IEnumerable<HighscoreEntry>? newHighscore)
@@ -25,7 +25,7 @@ namespace TibiaResults.Services
 
         private IEnumerable<CategoryResultEntry> GetExperienceResultEntries(IEnumerable<HighscoreEntry> oldHighscore, IEnumerable<HighscoreEntry> newHighscore, ILevelTracker levelTracker)
         {
-            foreach (var character in _configuration.Characters)
+            foreach (var character in _configurationService.Characters)
             {
                 var characterLevels = levelTracker.GetCharacterLevels(character);
                 var newEntry = newHighscore?.Where(e => e.Name == character).SingleOrDefault();
@@ -60,7 +60,7 @@ namespace TibiaResults.Services
 
         private IEnumerable<CategoryResultEntry> GetResultEntries(IEnumerable<HighscoreEntry> oldHighscore, IEnumerable<HighscoreEntry> newHighscore)
         {
-            foreach (var character in _configuration.Characters)
+            foreach (var character in _configurationService.Characters)
             {
                 var newEntry = newHighscore?.Where(e => e.Name == character).SingleOrDefault();
 

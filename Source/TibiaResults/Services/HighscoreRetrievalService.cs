@@ -7,20 +7,20 @@ namespace TibiaResults.Services
 {
     internal class HighscoreRetrievalService : IHighscoreRetrievalService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfigurationService _configurationService;
 
-        public HighscoreRetrievalService(IConfiguration configuration)
+        public HighscoreRetrievalService(IConfigurationService configurationService)
         {
-            _configuration = configuration;
+            _configurationService = configurationService;
 
             Providers = new Lazy<IEnumerable<IHighscoreProvider>>(InitializeProviders);
         }
 
         private Lazy<IEnumerable<IHighscoreProvider>> Providers { get; }
 
-        public Task<IEnumerable<HighscoreEntry>?> GetOldHighscoreAsync(string identifier) => GetHighscoreAsync(identifier, _configuration.Dates.From);
+        public Task<IEnumerable<HighscoreEntry>?> GetOldHighscoreAsync(string identifier) => GetHighscoreAsync(identifier, _configurationService.Dates.From);
 
-        public Task<IEnumerable<HighscoreEntry>?> GetNewHighscoreAsync(string identifier) => GetHighscoreAsync(identifier, _configuration.Dates.To);
+        public Task<IEnumerable<HighscoreEntry>?> GetNewHighscoreAsync(string identifier) => GetHighscoreAsync(identifier, _configurationService.Dates.To);
 
         private async Task<IEnumerable<HighscoreEntry>?> GetHighscoreAsync(string identifier, DateOnly date)
         {
@@ -28,12 +28,14 @@ namespace TibiaResults.Services
             {
                 var highscore = await TryToGetHighscoreAsync(provider, identifier, date);
 
-                if (highscore?.HighscoreList != null)
+                if (highscore?.HighscoreList == null)
                 {
-                    var relevantEntries = GetRelevantEntries(highscore.HighscoreList);
-
-                    return relevantEntries.ToList();
+                    continue;
                 }
+
+                var relevantEntries = GetRelevantEntries(highscore.HighscoreList);
+
+                return relevantEntries.ToList();
             }
 
             return null;
@@ -41,7 +43,7 @@ namespace TibiaResults.Services
 
         private IEnumerable<HighscoreEntry> GetRelevantEntries(IEnumerable<HighscoreEntry> entries)
         {
-            foreach (var character in _configuration.Characters)
+            foreach (var character in _configurationService.Characters)
             {
                 var characterEntry = entries.SingleOrDefault(e => e.Name == character);
 
@@ -58,7 +60,7 @@ namespace TibiaResults.Services
 
         private IEnumerable<IHighscoreProvider> InitializeProviders()
         {
-            var providers = GetProviders(_configuration.BlobContainerUri, _configuration.LocalPath);
+            var providers = GetProviders(_configurationService.BlobContainerUri, _configurationService.LocalPath);
 
             return providers.ToList();
         }
@@ -67,25 +69,12 @@ namespace TibiaResults.Services
         {
             if (localPath != null)
             {
-                yield return TryToCreateProvider(() => new FileProvider(localPath));
+                yield return new FileProvider(localPath);
             }
 
             if (blobContainerUri != null)
             {
-                yield return TryToCreateProvider(() => new AzureBlobProvider(blobContainerUri));
-            }
-        }
-
-        private static TProvider TryToCreateProvider<TProvider>(Func<TProvider> providerCreatingDelegate)
-            where TProvider : IHighscoreProvider
-        {
-            try
-            {
-                return providerCreatingDelegate();
-            }
-            catch (Exception exception)
-            {
-                throw new ProviderInitializationException<TProvider>(exception);
+                yield return new AzureBlobProvider(blobContainerUri);
             }
         }
 
@@ -93,9 +82,7 @@ namespace TibiaResults.Services
         {
             try
             {
-                var highscore = await provider.GetHighscoreAsync(identifier, date);
-
-                return highscore;
+                return await provider.GetHighscoreAsync(identifier, date);
             }
             catch (Exception exception)
             {

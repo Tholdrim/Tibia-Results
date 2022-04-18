@@ -5,16 +5,16 @@ namespace TibiaResults.Services
 {
     internal class LevelTrackingService : ILevelTrackingService
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfigurationService _configurationService;
 
-        public LevelTrackingService(IConfiguration configuration)
+        public LevelTrackingService(IConfigurationService configurationService)
         {
-            _configuration = configuration;
+            _configurationService = configurationService;
         }
 
         public void UpdateLevelTracker(ILevelTracker levelTracker, IEnumerable<HighscoreEntry>? oldHighscore, IEnumerable<HighscoreEntry>? newHighscore)
         {
-            foreach (var character in _configuration.Characters)
+            foreach (var character in _configurationService.Characters)
             {
                 var characterLevelHistory = levelTracker.GetCharacterLevels(character);
                 var oldHighscoreLevel = oldHighscore?.Where(e => e.Name == character).Select(e => (int?)e.Level).SingleOrDefault();

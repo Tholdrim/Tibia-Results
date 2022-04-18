@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TibiaResults.Configuration;
 using TibiaResults.Extensions;
 using TibiaResults.Formatters;
 using TibiaResults.Interfaces;
@@ -15,9 +14,7 @@ builder.ConfigureServices(services =>
         .AddApplicationService<ApplicationService>();
 
     services
-        .AddSingleton<IConfiguration, Configuration>();
-
-    services
+        .AddSingleton<IConfigurationService, ConfigurationService>()
         .AddSingleton<IHighscoreRetrievalService, HighscoreRetrievalService>()
         .AddSingleton<ILevelTrackingService, LevelTrackingService>()
         .AddSingleton<IResultComputingService, ResultComputingService>();

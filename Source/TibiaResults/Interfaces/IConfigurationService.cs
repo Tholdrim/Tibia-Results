@@ -1,6 +1,6 @@
 ﻿namespace TibiaResults.Interfaces
 {
-    internal interface IConfiguration
+    internal interface IConfigurationService
     {
         Uri? BlobContainerUri { get; }
 

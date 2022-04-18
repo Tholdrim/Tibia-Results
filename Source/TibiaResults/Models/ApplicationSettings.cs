@@ -1,15 +1,22 @@
-﻿namespace TibiaResults.Models
+﻿using System.Text.Json.Serialization;
+
+namespace TibiaResults.Models
 {
     internal class ApplicationSettings
     {
-        public Uri? BlobContainerUri { get; init; }
+        [JsonPropertyName("blobContainerUri")]
+        public string? BlobContainerUri { get; init; }
 
+        [JsonPropertyName("localPath")]
         public string? LocalPath { get; init; }
 
+        [JsonPropertyName("characters")]
         public IEnumerable<string>? Characters { get; init; }
 
-        public DateTime? From { get; init; }
+        [JsonPropertyName("from")]
+        public string? From { get; init; }
 
-        public DateTime? To { get; init; }
+        [JsonPropertyName("to")]
+        public string? To { get; init; }
     }
 }
