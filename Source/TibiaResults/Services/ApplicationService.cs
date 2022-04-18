@@ -52,7 +52,7 @@ namespace TibiaResults.Services
             var result = Result.CreateNew();
             var levelTracker = LevelTracker.CreateEmpty();
 
-            foreach (var category in CategoryHelper.GetCategories())
+            foreach (var category in CategoryHelper.GetCategories().OrderBy(c => c == Categories.Experience))
             {
                 var categoryResult = await GetCategoryResultAsync(category, levelTracker);
 

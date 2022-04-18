@@ -13,6 +13,7 @@ namespace TibiaResults.Helpers
             yield return Categories.ClubFighting;
             yield return Categories.DistanceFighting;
             yield return Categories.DromeScore;
+            yield return Categories.Experience;
             yield return Categories.Fishing;
             yield return Categories.FistFighting;
             yield return Categories.GoshnarsTaint;
@@ -20,7 +21,6 @@ namespace TibiaResults.Helpers
             yield return Categories.MagicLevel;
             yield return Categories.Shielding;
             yield return Categories.SwordFighting;
-            yield return Categories.Experience;
         }
     }
 }
