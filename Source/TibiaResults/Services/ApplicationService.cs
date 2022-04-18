@@ -1,4 +1,5 @@
-﻿using TibiaResults.Helpers;
+﻿using TibiaResults.Consts;
+using TibiaResults.Helpers;
 using TibiaResults.Interfaces;
 using TibiaResults.Models;
 
@@ -36,7 +37,7 @@ namespace TibiaResults.Services
             var oldHighscore = await _highscoreRetrievalService.GetOldHighscoreAsync(category.Identifier);
             var newHighscore = await _highscoreRetrievalService.GetNewHighscoreAsync(category.Identifier);
 
-            if (category == CategoryHelper.Experience)
+            if (category == Categories.Experience)
             {
                 return _resultComputingService.ComputeExperienceCategoryResult(oldHighscore, newHighscore, levelTracker);
             }
