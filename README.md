@@ -10,7 +10,7 @@ The program was written in C# for the .NET platform, so it should run on any rec
 
 ## Prerequisites
 
-TibiaResults requires the [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) platform to run. If you intend to run the program under Windows, all you need to do is download the appropriate version of the .NET runtime and binaries from the [Releases](https://github.com/Tholdrim/TibiaResults/releases) feed. Otherwise you will have to download the SDK and build the application yourself.
+TibiaResults requires the [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) platform to run. If you intend to run the program on Windows, download the appropriate version of the .NET runtime and binaries from the [Releases](https://github.com/Tholdrim/TibiaResults/releases) feed. Otherwise, you will have to download the SDK and build the application yourself.
 
 ## Usage
 
