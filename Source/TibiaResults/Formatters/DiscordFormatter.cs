@@ -59,13 +59,18 @@ namespace TibiaResults.Formatters
             return stringBuilder.ToString();
         }
 
-        private static string FormatEntryProgress(CategoryResultEntry entry) => entry switch
+        private static string FormatEntryProgress(CategoryResultEntry entry)
         {
-            { Progress: 0 }                     => string.Empty,
-            { Progress: null }                  => " :new:",
-            { IsApproximate: true, Rank: { } }  => $" :new: (**approximately +{entry.Progress.Value:N0}**)",
-            { IsApproximate: true, Rank: null } => $" (**approximately +{entry.Progress.Value:N0}**)",
-            _                                   => $" (**+{entry.Progress.Value:N0}**)"
-        };
+            const string formatString = "+###,###,###,###,###;-###,###,###,###,###";
+
+            return entry switch
+            {
+                { Progress: 0 }                     => string.Empty,
+                { Progress: null }                  => " :new:",
+                { IsApproximate: true, Rank: { } }  => $" :new: (**approximately {entry.Progress.Value.ToString(formatString)}**)",
+                { IsApproximate: true, Rank: null } => $" (**approximately {entry.Progress.Value.ToString(formatString)}**)",
+                _                                   => $" (**{entry.Progress.Value.ToString(formatString)}**)"
+            };
+        }
     }
 }
