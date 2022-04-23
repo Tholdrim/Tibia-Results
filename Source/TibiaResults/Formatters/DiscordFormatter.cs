@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using TibiaResults.Extensions;
 using TibiaResults.Interfaces;
 using TibiaResults.Models;
 
@@ -39,9 +40,10 @@ namespace TibiaResults.Formatters
 
             foreach (var entry in rankedEntries)
             {
-                var formattedProgress = FormatEntryProgress(entry);
+                var formattableProgress = GetFormattableEntryProgress(entry);
+                var formattedEntry = FormattableString.Invariant($"{entry.Rank}. {entry.Name} - {entry.Value:N0}{formattableProgress}");
 
-                stringBuilder.AppendLine($"{entry.Rank}. {entry.Name} - {entry.Value:N0}{formattedProgress}");
+                stringBuilder.AppendLine(formattedEntry);
             }
 
             if (unrankedEntries.Any())
@@ -51,26 +53,22 @@ namespace TibiaResults.Formatters
 
             foreach (var entry in unrankedEntries)
             {
-                var formattedProgress = FormatEntryProgress(entry);
+                var formattableProgress = GetFormattableEntryProgress(entry);
+                var formattedEntry = FormattableString.Invariant($"{entry.Name} - approximately {entry.Value:N0}{formattableProgress}");
 
-                stringBuilder.AppendLine($"{entry.Name} - approximately {entry.Value:N0}{formattedProgress}");
+                stringBuilder.AppendLine(formattedEntry);
             }
 
             return stringBuilder.ToString();
         }
 
-        private static string FormatEntryProgress(CategoryResultEntry entry)
+        private static FormattableString GetFormattableEntryProgress(CategoryResultEntry entry) => entry switch
         {
-            const string formatString = "+###,###,###,###,###;-###,###,###,###,###";
-
-            return entry switch
-            {
-                { Progress: 0 }                     => string.Empty,
-                { Progress: null }                  => " :new:",
-                { IsApproximate: true, Rank: { } }  => $" :new: (**approximately {entry.Progress.Value.ToString(formatString)}**)",
-                { IsApproximate: true, Rank: null } => $" (**approximately {entry.Progress.Value.ToString(formatString)}**)",
-                _                                   => $" (**{entry.Progress.Value.ToString(formatString)}**)"
-            };
-        }
+            { Progress: 0 }                     => $"",
+            { Progress: null }                  => $" :new:",
+            { IsApproximate: true, Rank: { } }  => $" :new: (**approximately {entry.Progress.Value.ToFormattableSignedNumber()}**)",
+            { IsApproximate: true, Rank: null } => $" (**approximately {entry.Progress.Value.ToFormattableSignedNumber()}**)",
+            _                                   => $" (**{entry.Progress.Value.ToFormattableSignedNumber()}**)"
+        };
     }
 }
