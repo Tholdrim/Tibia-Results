@@ -9,57 +9,56 @@ namespace TibiaResults.Formatters
     {
         public string FormatResult(IResult result)
         {
+            var formattedCategoryParts = result.Categories
+                .OrderBy(c => c.Order)
+                .Select(c => FormatCategoryPart(c, result[c]))
+                .ToArray();
+
+            return string.Join(Environment.NewLine, formattedCategoryParts);
+        }
+
+        private static string FormatCategoryPart(Category category, CategoryResult categoryResult)
+        {
             var stringBuilder = new StringBuilder();
+            var formattedCategoryResult = FormatCategoryResult(categoryResult);
 
-            foreach (var category in result.Categories.OrderBy(c => c.Order))
-            {
-                var categoryResult = result[category];
-                var formattedCategoryResult = FormatCategoryResult(categoryResult);
-
-                stringBuilder.AppendLine($"**{category.Name}**");
-                stringBuilder.AppendLine();
-                stringBuilder.AppendLine(formattedCategoryResult);
-            }
+            stringBuilder.AppendLine($"**{category.Name}**");
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine(formattedCategoryResult);
 
             return stringBuilder.ToString();
         }
 
         private static string FormatCategoryResult(CategoryResult categoryResult) => categoryResult switch
         {
-            { IsAvailable: false } => $":construction: *Not available*{Environment.NewLine}",
-            { IsEmpty: true }      => $":open_file_folder: *No entries*{Environment.NewLine}",
-            _                      => FormatEntryList(categoryResult.Entries)
+            { IsAvailable: false } => ":construction: *Not available*",
+            { IsEmpty: true }      => ":open_file_folder: *No entries*",
+            _                      => string.Join(Environment.NewLine, FormatEntryListLines(categoryResult.Entries))
         };
 
-        private static string FormatEntryList(IEnumerable<CategoryResultEntry> entries)
+        private static IEnumerable<string> FormatEntryListLines(IEnumerable<CategoryResultEntry> entries)
         {
-            var stringBuilder = new StringBuilder();
-
             var rankedEntries = entries.Where(e => e.Rank.HasValue).OrderBy(e => e.Rank);
             var unrankedEntries = entries.Where(e => !e.Rank.HasValue).OrderByDescending(e => e.Value);
 
             foreach (var entry in rankedEntries)
             {
                 var formattableProgress = GetFormattableEntryProgress(entry);
-                var formattedEntry = FormattableString.Invariant($"{entry.Rank}. {entry.Name} - {entry.Value:N0}{formattableProgress}");
 
-                stringBuilder.AppendLine(formattedEntry);
+                yield return FormattableString.Invariant($"{entry.Rank}. {entry.Name} - {entry.Value:N0}{formattableProgress}");
             }
 
             if (unrankedEntries.Any())
             {
-                stringBuilder.AppendLine();
+                yield return string.Empty;
             }
 
             foreach (var entry in unrankedEntries)
             {
                 var formattableProgress = GetFormattableEntryProgress(entry);
-                var formattedEntry = FormattableString.Invariant($"{entry.Name} - approximately {entry.Value:N0}{formattableProgress}");
 
-                stringBuilder.AppendLine(formattedEntry);
+                yield return FormattableString.Invariant($"{entry.Name} - approximately {entry.Value:N0}{formattableProgress}");
             }
-
-            return stringBuilder.ToString();
         }
 
         private static FormattableString GetFormattableEntryProgress(CategoryResultEntry entry) => entry switch
