@@ -18,7 +18,7 @@ The first step is to get the JSON files from the TibiaData API page (for testing
 
 ```
 {
-    "localPath": "C:/Highscores"
+    "localPath": "C:/Highscores",
     "characters": [
         "Tholdrim",
         "Khilleron",
