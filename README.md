@@ -1,12 +1,16 @@
-# TibiaResults 
+<h1 align="center">
+    <a href="https://github.com/Tholdrim/TibiaResults"><img src="Documentation/Logo.png" /></a>
+</h1>
 
-<img src="Documentation/Screenshot.png" align="right" width="220" height="250" />
+<p align="center">
+    <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0"><img alt=".NET: 6.0" src="https://img.shields.io/badge/.NET-6.0-blue.svg?style=flat-square" /></a>
+    <a href="https://github.com/Tholdrim/TibiaResults/releases"><img alt="Releases" src="https://img.shields.io/github/release/Tholdrim/TibiaResults.svg?color=yellow&label=Version&style=flat-square" /></a>
+    <a href="LICENSE.txt"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square" /></a>
+</p>
 
 TibiaResults is a tool initially created to generate monthly summaries of my buddies' progress in the MMORPG [Tibia](https://www.tibia.com). Such a set of statistics allows us to compare our performance and motivate each other to work harder.
 
 The program was written in C# for the .NET platform, so it should run on any recent operating system. It relies on data in the format returned by the [TibiaData API v3](https://tibiadata.com). I primarily used a simple Azure Logic App to retrieve and save such files every first day of the month, but nothing prevents you from obtaining this data in other ways or at different frequencies.
-
-<br clear="right" />
 
 ## Prerequisites
 
@@ -14,19 +18,16 @@ TibiaResults requires the [.NET 6.0](https://dotnet.microsoft.com/en-us/download
 
 ## Usage
 
-The first step is to get the JSON files from the TibiaData API page (for testing purposes, you can also use the included [sample data](Sample%20data) with Refugia server high score lists). These should be saved locally on disk or in an Azure Blob container in the format `{category}/{yyyy-MM-dd}.json`. Next, populate the [`Settings.json`](Source/TibiaResults/Settings.json) file with the appropriate values, e.g.:
+The first step is to get the JSON files from the TibiaData API page (for testing purposes, you can also use the included [sample data](Sample%20data) with Refugia server high score lists). These should be saved locally on disk or in an Azure Blob container in the format `{category}/{YYYY-MM-DD}.json`. Next, populate the [`Settings.json`](Source/TibiaResults/Settings.json) file with the appropriate values, e.g.:
 
-```
+```json
 {
-    "localPath": "C:/Highscores",
+    "localPath": "C:\\Highscores",
     "characters": [
         "Tholdrim",
-        "Khilleron",
-        "Tuuro",
-        "Silmare",
-        "Kalliore",
-        "Cieniaseq",
-        "Talisis"
+        "Aynith",
+        "Ithevia",
+        "Vernock"
     ],
     "from": "2022-02-01",
     "to": "2022-03-01"
