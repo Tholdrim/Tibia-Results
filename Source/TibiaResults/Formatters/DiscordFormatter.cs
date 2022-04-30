@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using TibiaResults.Extensions;
+using TibiaResults.Helpers;
 using TibiaResults.Interfaces;
 using TibiaResults.Models;
 
@@ -38,14 +39,17 @@ namespace TibiaResults.Formatters
 
         private static IEnumerable<string> FormatEntryListLines(IEnumerable<CategoryResultEntry> entries)
         {
+            var categoryWinners = CategoryHelper.GetWinners(entries);
+
             var rankedEntries = entries.Where(e => e.Rank.HasValue).OrderBy(e => e.Rank);
             var unrankedEntries = entries.Where(e => !e.Rank.HasValue).OrderByDescending(e => e.Value);
 
             foreach (var entry in rankedEntries)
             {
                 var formattableProgress = GetFormattableEntryProgress(entry);
+                var icons = GetEntryIcons(entry, categoryWinners);
 
-                yield return FormattableString.Invariant($"{entry.Rank}. {entry.Name} - {entry.Value:N0}{formattableProgress}");
+                yield return FormattableString.Invariant($"{entry.Rank}. {entry.Name} - {entry.Value:N0}{formattableProgress}{icons}");
             }
 
             if (unrankedEntries.Any())
@@ -56,18 +60,40 @@ namespace TibiaResults.Formatters
             foreach (var entry in unrankedEntries)
             {
                 var formattableProgress = GetFormattableEntryProgress(entry);
+                var icons = GetEntryIcons(entry, categoryWinners);
 
-                yield return FormattableString.Invariant($"{entry.Name} - approximately {entry.Value:N0}{formattableProgress}");
+                yield return FormattableString.Invariant($"{entry.Name} - approximately {entry.Value:N0}{formattableProgress}{icons}");
             }
+        }
+
+        private static string GetEntryIcons(CategoryResultEntry entry, IDictionary<string, int?> categoryWinners)
+        {
+            categoryWinners.TryGetValue(entry.Name, out var place);
+
+            var placeIcon = place switch
+            {
+                1 => " :first_place:",
+                2 => " :second_place:",
+                3 => " :third_place:",
+                _ => string.Empty
+            };
+
+            var newIcon = entry switch
+            {
+                { Progress: null }                 => " :new:",
+                { IsApproximate: true, Rank: { } } => " :new:",
+                _                                  => string.Empty
+            };
+
+            return placeIcon + newIcon;
         }
 
         private static FormattableString GetFormattableEntryProgress(CategoryResultEntry entry) => entry switch
         {
-            { Progress: 0 }                     => $"",
-            { Progress: null }                  => $" :new:",
-            { IsApproximate: true, Rank: { } }  => $" :new: (**approximately {entry.Progress.Value.ToFormattableSignedNumber()}**)",
-            { IsApproximate: true, Rank: null } => $" (**approximately {entry.Progress.Value.ToFormattableSignedNumber()}**)",
-            _                                   => $" (**{entry.Progress.Value.ToFormattableSignedNumber()}**)"
+            { Progress: 0 }         => $"",
+            { Progress: null }      => $"",
+            { IsApproximate: true } => $" (**approximately {entry.Progress.Value.ToFormattableSignedNumber()}**)",
+            _                       => $" (**{entry.Progress.Value.ToFormattableSignedNumber()}**)"
         };
     }
 }
