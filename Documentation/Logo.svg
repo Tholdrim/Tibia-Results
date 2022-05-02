@@ -1,7 +1,7 @@
 <svg width="888" height="180" xmlns="http://www.w3.org/2000/svg">
   <rect width="100%" height="100%" rx="25" ry="25" fill="#222831" />
   <svg x="361.5" y="15" width="165" height="150" viewBox="0 0 220 200">
-    <text x="50%" y="189" font-family="'Yaldevi'" font-size="40" font-weight="100" fill="#eeeeee" text-anchor="middle">TibiaResults</text>
+    <text x="50%" y="189" font-family="'Yaldevi'" font-size="40" font-weight="200" fill="#eeeeee" text-anchor="middle">TibiaResults</text>
     <path d="m110,11l50,30l0,50l-50,30l-50,-30l0,-50z" fill="transparent" stroke="#eeeeee" stroke-width="2" />
     <g fill="#ffd369">
       <path d="m75,86l10,0l0,-15l-10,0l0,20z" />
