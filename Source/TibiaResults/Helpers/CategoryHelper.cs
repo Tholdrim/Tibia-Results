@@ -9,6 +9,7 @@ namespace TibiaResults.Helpers
         {
             yield return Categories.Achievements;
             yield return Categories.AxeFighting;
+            yield return Categories.BossPoints;
             yield return Categories.CharmPoints;
             yield return Categories.ClubFighting;
             yield return Categories.DistanceFighting;
